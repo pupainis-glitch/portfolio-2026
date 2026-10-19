@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juris Pupainis — Portfolio 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #111316;
+      --card-bg: #181b1f;
+      --border: #262b33;
+      --border-subtle: #1e2229;
+      --text-main: #eceff4;
+      --text-muted: #838e9d;
+      --text-dim: #545e6d;
+      --accent: #d8dee9;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, "Courier New", monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f6f8;
+      --card-bg: #ffffff;
+      --border: #e2e5ea;
+      --border-subtle: #edf0f4;
+      --text-main: #181b1f;
+      --text-muted: #647082;
+      --text-dim: #9aa5b5;
+      --accent: #2e3440;
+    }
+
+    [data-theme="mono"] {
+      --bg: #000000;
+      --card-bg: #0a0a0a;
+      --border: #222222;
+      --border-subtle: #141414;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --text-dim: #444444;
+      --accent: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* Top Bar */
+    header {
+      height: 52px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      color: var(--text-main);
+      border-color: var(--text-muted);
+    }
+
+    .btn.active {
+      color: var(--text-main);
+      border-color: var(--accent);
+      background: var(--border-subtle);
+    }
+
+    /* Main Viewport */
+    main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-stage {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 18px 28px;
+      gap: 14px;
+    }
+
+    /* Slide Header */
+    .slide-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .meta-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slide-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .slide-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+    }
+
+    .slide-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .meta-right {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    /* Diptych Container */
+    .diptych-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .pane {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pane-media {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      min-height: 0;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .pane-media img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pane-media:hover img {
+      transform: scale(1.015);
+    }
+
+    .pane-caption {
+      height: 32px;
+      padding: 0 14px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.1);
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .pane-tag {
+      color: var(--text-dim);
+    }
+
+    /* Cover / Closing Layout */
+    .single-pane-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .hero-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: var(--text-main);
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.5;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      gap: 32px;
+    }
+
+    /* Bottom Navigation Bar */
+    footer {
+      height: 48px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 380px;
+      margin: 0 20px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.2s ease;
+    }
+
+    .key-hint {
+      color: var(--text-dim);
+      font-size: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .kbd {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--text-muted);
+    }
+
+    /* Gallery Drawer Modal */
+    .gallery-overlay {
+      position: fixed;
+      top: 52px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 12, 14, 0.95);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+      padding: 30px;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .gallery-overlay.active {
+      display: flex;
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .gallery-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .gallery-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .gallery-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .gallery-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .gallery-card.current {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .gallery-card-thumb {
+      height: 120px;
+      background: #000;
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      overflow: hidden;
+      padding: 4px;
+    }
+
+    .gallery-card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: var(--card-bg);
+    }
+
+    .gallery-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .gallery-card-id {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-dim);
+    }
+
+    .gallery-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.96);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      cursor: zoom-out;
+    }
+
+    .lightbox-modal.active {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 95vw;
+      max-height: 92vh;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      border-radius: 4px;
+    }
+
+    /* Print Styles for PDF generation */
+    @media print {
+      @page {
+        size: landscape;
+        margin: 0;
+      }
+      body {
+        height: auto;
+        overflow: visible;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      header, footer, .gallery-overlay, .lightbox-modal {
+        display: none !important;
+      }
+      .slide-stage {
+        page-break-after: always;
+        height: 100vh;
+        padding: 24px 36px;
+        box-sizing: border-box;
+      }
+      .pane {
+        background: #ffffff !important;
+        border: 1px solid #cccccc !important;
+      }
+      .pane-caption {
+        background: #f8f9fa !important;
+        border-top: 1px solid #eeeeee !important;
+        color: #555555 !important;
+      }
+      .slide-title, .hero-title {
+        color: #000000 !important;
+      }
+      .slide-badge, .slide-subtitle, .hero-subtitle {
+        color: #444444 !important;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span class="brand-title">JURIS PUPAINIS</span>
+      <span class="brand-sub">/ ARCHITECTURE & ENGINEERING</span>
+    </div>
+    <div class="header-controls">
+      <button class="btn" id="themeBtn" title="Pārslēgt tēmu (Tumšs / Gaišs / Melnbalts)">
+        <span>THEME</span>
+      </button>
+      <button class="btn" id="galleryBtn" title="Atvērt visu slaidu matricu (G)">
+        <span>GALLERY (G)</span>
+      </button>
+      <button class="btn" id="fullscreenBtn" title="Pilnekrāna režīms (F)">
+        <span>FULLSCREEN (F)</span>
+      </button>
+      <button class="btn" id="printBtn" title="Drukāt vai saglabāt PDF (Ctrl+P)">
+        <span>SAVE PDF / PRINT</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main>
+    <div class="slide-stage" id="slideStage">
+      <!-- Dynamic slide content injected by JavaScript -->
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer>
+    <div class="nav-left">
+      <button class="btn" id="prevBtn">← PREV</button>
+      <button class="btn" id="nextBtn">NEXT →</button>
+      <span id="slideCounter" style="color: var(--text-muted); margin-left: 8px;">01 / 29</span>
+    </div>
+
+    <div class="progress-bar-container" id="progressTrack" title="Klikšķiniet, lai pārlēktu">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="nav-right">
+      <div class="key-hint">
+        <span><span class="kbd">←</span> <span class="kbd">→</span> Navigācija</span>
+        <span><span class="kbd">G</span> Matrica</span>
+        <span><span class="kbd">F</span> Pilnekrāns</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Gallery Overview Drawer -->
+  <div class="gallery-overlay" id="galleryModal">
+    <div class="gallery-header">
+      <div class="gallery-title">MEISTARA PORTFOLIO MATRICA (29 SLAIDI)</div>
+      <button class="btn" id="closeGalleryBtn">AIZVĒRT [ESC]</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Injected by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <img src="" alt="Full view" class="lightbox-img" id="lightboxImg">
+  </div>
+
+  <script>
+    const slides = [
+  {
+    "id": "01",
+    "title": "JURIS PUPAINIS",
+    "subtitle": "SELECTED WORKS & PROJECTS · 2008 – 2026",
+    "category": "INDEX / INTRO",
+    "year": "2008 – 2026",
+    "type": "cover"
+  },
+  {
+    "id": "02",
+    "title": "ARCHITECTURAL SCALE MODELS I",
+    "subtitle": "Spatial volume and topography studies",
+    "category": "ARCHITECTURE / MODEL MAKING",
+    "year": "EARLY WORKS",
+    "left_img": "Arch maketi/mak 002.jpg",
+    "right_img": "Arch maketi/mak 005.jpg",
+    "left_label": "STUDY MODEL / WOOD & FOAM",
+    "right_label": "MASSING & VOLUME STUDY"
+  },
+  {
+    "id": "03",
+    "title": "ARCHITECTURAL SCALE MODELS II",
+    "subtitle": "Façade articulation and urban scale",
+    "category": "ARCHITECTURE / MODEL MAKING",
+    "year": "EARLY WORKS",
+    "left_img": "Arch maketi/mak 009.jpg",
+    "right_img": "Arch maketi/DSC05333.JPG",
+    "left_label": "FACADE DETAIL / CRAFT MODEL",
+    "right_label": "OVERALL COMPLEX COMPOSITION"
+  },
+  {
+    "id": "04",
+    "title": "STRUCTURAL JOINTS & HINGES",
+    "subtitle": "2-hinge steel connection system & bridge node",
+    "category": "STRUCTURAL ENGINEERING",
+    "year": "2008",
+    "left_img": "Seni renderi/2sharniru detaljas_20080424_basic_klajs.jpg",
+    "right_img": "Seni renderi/2sharniru detaljas_20080424_basic_tilts.jpg",
+    "left_label": "STRUCTURAL NODE SCHEMATIC",
+    "right_label": "3D GEOMETRY / SPATIAL TRUSS"
+  },
+  {
+    "id": "05",
+    "title": "CURVED CANOPY ROOF STRUCTURE",
+    "subtitle": "Parametric steel frame & 'Alusipēds' mobile vehicle canopy",
+    "category": "STRUCTURAL DESIGN & VEHICLE CANOPY",
+    "year": "2011",
+    "left_img": "Seni renderi/jumta konstr_20110613_04.jpg",
+    "right_img": "presentation_assets/alusipeds_canopy_realization.jpg",
+    "left_label": "3D CAD FRAME & HUMAN SCALE",
+    "right_label": "BUILT VEHICLE CANOPY REALIZATION"
+  },
+  {
+    "id": "06",
+    "title": "DZINTARU CONCERT HALL I",
+    "subtitle": "Entrance portal structures and exterior cladding",
+    "category": "PUBLIC ARCHITECTURE",
+    "year": "2014 – 2015",
+    "left_img": "presentation_assets/drw_dzkz_portali.png",
+    "right_img": "DZKZ/SAM_1319.JPG",
+    "left_label": "TECHNICAL DRAWING / PORTAL NODES",
+    "right_label": "BUILT REALIZATION / JŪRMALA"
+  },
+  {
+    "id": "07",
+    "title": "DZINTARU CONCERT HALL II",
+    "subtitle": "Sanitary module structures & stainless steel detailing",
+    "category": "PUBLIC INTERIOR",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_dzkz_wc_r1.png",
+    "right_img": "DZKZ/P4206031.JPG",
+    "left_label": "PRODUCTION DRAWING / SECTIONS",
+    "right_label": "INTERIOR FINISH REALIZATION"
+  },
+  {
+    "id": "08",
+    "title": "VBC ROTARY SYSTEMS & MACHINERY",
+    "subtitle": "RCH heavy machinery and rotary equipment design",
+    "category": "INDUSTRIAL ENGINEERING",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_vbc_rch1350.png",
+    "right_img": "VBC/IMG_20190412_103340.jpg",
+    "left_label": "ENGINEERING DRAWING / SECTIONS",
+    "right_label": "FABRICATION & FINAL ASSEMBLY"
+  },
+  {
+    "id": "09",
+    "title": "AERODIUM INDONESIA I",
+    "subtitle": "Flight chamber and main structural envelope",
+    "category": "WIND TUNNEL ENGINEERING",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_aerodium_indonesia_chamber.png",
+    "right_img": "Aerodium Indonesia/DSC_0747.JPG",
+    "left_label": "FLIGHT CHAMBER FABRICATION DRAWING",
+    "right_label": "ON-SITE FLIGHT ZONE REALIZATION"
+  },
+  {
+    "id": "10",
+    "title": "AERODIUM INDONESIA II",
+    "subtitle": "International logistics and transportation scheme",
+    "category": "LOGISTICS & FABRICATION",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_aerodium_indonesia_transport.png",
+    "right_img": "Aerodium Indonesia/DSC_0278.JPG",
+    "left_label": "CONTAINER LOADING & PACKING SCHEME",
+    "right_label": "STRUCTURAL ERECTION ON SITE"
+  },
+  {
+    "id": "11",
+    "title": "AERODIUM R2 I",
+    "subtitle": "Main structural frame assembly & safety barriers",
+    "category": "WIND TUNNEL ENGINEERING",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_aerodium_r2_frame.png",
+    "right_img": "Aerodium R2/IMG_20181206_151527.jpg",
+    "left_label": "ASSEMBLY SPECIFICATION DRAWING",
+    "right_label": "FACTORY STEEL FABRICATION"
+  },
+  {
+    "id": "12",
+    "title": "AERODIUM R2 II",
+    "subtitle": "Aerodynamic turning vanes and air flow guide system",
+    "category": "AERODYNAMICS & DUCTING",
+    "year": "2015",
+    "left_img": "presentation_assets/drw_aerodium_r2_vanes.png",
+    "right_img": "Aerodium R2/IMG_20181217_141426.jpg",
+    "left_label": "TURNING VANE PRODUCTION DRAWING",
+    "right_label": "FINISHED VANE SEGMENTS"
+  },
+  {
+    "id": "13",
+    "title": "STIRLING POWER SYSTEM",
+    "subtitle": "Heavy-duty modular steel framework",
+    "category": "EQUIPMENT DESIGN",
+    "year": "2016",
+    "left_img": "presentation_assets/drw_stirling.png",
+    "right_img": "Seni renderi/hi_boom_free_perlamutra.jpg",
+    "left_label": "STRUCTURAL CAD DRAWING STR-00",
+    "right_label": "INDUSTRIAL DESIGN VISUALIZATION"
+  },
+  {
+    "id": "14",
+    "title": "AERODIUM PERITON I",
+    "subtitle": "Flight tower steel infrastructure and support grid",
+    "category": "TALL STEEL STRUCTURES",
+    "year": "2017 – 2019",
+    "left_img": "Aerodium Periton/DSC_2314.JPG",
+    "right_img": "Aerodium Periton/IMG_20170725_174457.jpg",
+    "left_label": "MAIN COLUMN & TRUSS ASSEMBLY",
+    "right_label": "INTERMEDIATE RING ERECTION"
+  },
+  {
+    "id": "15",
+    "title": "AERODIUM PERITON II",
+    "subtitle": "Upper flight deck and glass chamber envelope",
+    "category": "TALL STEEL STRUCTURES",
+    "year": "2017 – 2019",
+    "left_img": "Aerodium Periton/IMG_20170728_100533.jpg",
+    "right_img": "Aerodium Periton/IMG_20191024_163832.jpg",
+    "left_label": "SUBSTRUCTURE INTEGRATION",
+    "right_label": "FINISHED FACILITY OVERVIEW"
+  },
+  {
+    "id": "16",
+    "title": "AERODIUM O2 PLATFORM",
+    "subtitle": "Open-air flying platform & aerodynamic perimeter",
+    "category": "OUTDOOR ATTRACTION",
+    "year": "2018",
+    "left_img": "Aerodium O2 platforma/PLATFORMA.150.jpg",
+    "right_img": "Aerodium O2 platforma/DSC_2206.JPG",
+    "left_label": "3D CAD MODEL / AIR DUCT PLATFORM",
+    "right_label": "FLIGHT OPERATION IN NATURE"
+  },
+  {
+    "id": "17",
+    "title": "AERODIUM R4 I",
+    "subtitle": "Precision fan diffusers and high-speed ducting",
+    "category": "AERODYNAMIC DUCTING",
+    "year": "2018",
+    "left_img": "presentation_assets/drw_aerodium_r4_diffusers.png",
+    "right_img": "Aeroium R4/IMG_20180409_162723.jpg",
+    "left_label": "DIFFUSER FABRICATION SPECIFICATION",
+    "right_label": "WORKSHOP ASSEMBLY & TOLERANCE CHECK"
+  },
+  {
+    "id": "18",
+    "title": "AERODIUM R4 II",
+    "subtitle": "Primary structural shell and heavy fan casing",
+    "category": "WIND TUNNEL CORE",
+    "year": "2019",
+    "left_img": "presentation_assets/drw_aerodium_r4_body.png",
+    "right_img": "Aeroium R4/IMG_20190517_115054.jpg",
+    "left_label": "SHELL PRODUCTION BLUEPRINT",
+    "right_label": "CRANE INSTALLATION OF DUCTS"
+  },
+  {
+    "id": "19",
+    "title": "AERODIUM R4 III",
+    "subtitle": "Flight chamber interior and final commissioning",
+    "category": "COMMISSIONING",
+    "year": "2021 – 2022",
+    "left_img": "Aeroium R4/IMG_20211103_155632.jpg",
+    "right_img": "Aeroium R4/IMG_20211221_120532.jpg",
+    "left_label": "INTERIOR CHAMBER INTEGRATION",
+    "right_label": "OPERATIONAL FACILITY AT NIGHT"
+  },
+  {
+    "id": "20",
+    "title": "AERODIUM R&D: WALL-TO-WALL",
+    "subtitle": "W2W aerodynamic concept and architectural integration",
+    "category": "R&D INNOVATION",
+    "year": "2018 – 2020",
+    "left_img": "Aerodium R&D/W2W_11.730.jpg",
+    "right_img": "Aerodium R&D/FAS_1.jpg",
+    "left_label": "W2W FLUID-FLOW CONCEPT",
+    "right_label": "FAÇADE INTEGRATION RENDERING"
+  },
+  {
+    "id": "21",
+    "title": "PORTAL HOUSE",
+    "subtitle": "Prefabricated modular timber/steel portal frame home",
+    "category": "MODULAR ARCHITECTURE",
+    "year": "2020",
+    "left_img": "presentation_assets/drw_portal_house.png",
+    "right_img": "Seni renderi/Portal hause_Rev8 9.png",
+    "left_label": "STRUCTURAL PORTAL FRAME PLAN",
+    "right_label": "ARCHITECTURAL VISUALIZATION"
+  },
+  {
+    "id": "22",
+    "title": "MDT-TEX: GHADAN 21",
+    "subtitle": "Large-span membrane canopies (7.5x7.5m) · Abu Dhabi",
+    "category": "TENSILE ARCHITECTURE",
+    "year": "2019 – 2020",
+    "left_img": "presentation_assets/drw_mdt_canopy.png",
+    "right_img": "MDT-tex/20260208_174647.jpg",
+    "left_label": "CANOPY CANTILEVER ENGINEERING",
+    "right_label": "MEMBRANE MAST ASSEMBLY ON SITE"
+  },
+  {
+    "id": "23",
+    "title": "MDT-TEX: BASE FLANGE & JOINTS",
+    "subtitle": "High-load cantilever baseplates and anchoring systems",
+    "category": "STRUCTURAL DETAILING",
+    "year": "2020",
+    "left_img": "presentation_assets/drw_mdt_flange.png",
+    "right_img": "MDT-tex/DSC_4741_980px_460px.jpg",
+    "left_label": "BASE FLANGE FABRICATION REDESIGN",
+    "right_label": "FABRICATED ANCHOR BASE"
+  },
+  {
+    "id": "24",
+    "title": "MDT-TEX: PENINSULA HOTEL",
+    "subtitle": "Bespoke architectural umbrellas · Bosphorus, Istanbul",
+    "category": "HOSPITALITY ARCHITECTURE",
+    "year": "2022 – 2023",
+    "left_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-8.jpg",
+    "right_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-9.jpg",
+    "left_label": "SEASIDE PROMENADE INSTALLATION",
+    "right_label": "HISTORIC WATERFRONT CONTEXT"
+  },
+  {
+    "id": "25",
+    "title": "MDT-TEX: CLIMATE INTERVENTION",
+    "subtitle": "Urban microclimate cooling and kinetic sun protection",
+    "category": "URBAN DESIGN",
+    "year": "2023 – 2024",
+    "left_img": "MDT-tex/csm_ClimateIntervention_1_4c66894de0.png",
+    "right_img": "MDT-tex/csm_ClimateIntervention_3_6655fd0914.png",
+    "left_label": "KINETIC MODULAR SHADE CONCEPT",
+    "right_label": "URBAN PLAZA DEPLOYMENT"
+  },
+  {
+    "id": "26",
+    "title": "PRESTOL: OLT-USA COMPETITION SLED",
+    "subtitle": "High-precision luge/sled structural components",
+    "category": "HIGH-PERFORMANCE SPORTS",
+    "year": "2022",
+    "left_img": "presentation_assets/drw_prestol_olt_sled.png",
+    "right_img": "Prestol/7-1.png",
+    "left_label": "PRECISION CNC DRAWING OLT-USA",
+    "right_label": "COMPLEX RUNNER CAD GEOMETRY"
+  },
+  {
+    "id": "27",
+    "title": "PRESTOL: MODULAR COFFEE STATIONS (CHS)",
+    "subtitle": "Self-service station pod design & batch production",
+    "category": "INDUSTRIAL & PRODUCT DESIGN",
+    "year": "2021 – 2022",
+    "left_img": "presentation_assets/drw_prestol_chs_station.png",
+    "right_img": "Prestol/20261010_104657.jpg",
+    "left_label": "CAD SPECIFICATION & SECTIONS",
+    "right_label": "BATCH WORKSHOP FABRICATION REALIZATION"
+  },
+  {
+    "id": "28",
+    "title": "LATVIAN NATIONAL MUSEUM OF ART",
+    "subtitle": "Specialized gallery panel system & exhibition architecture",
+    "category": "MUSEUM ARCHITECTURE",
+    "year": "2026",
+    "left_img": "presentation_assets/drw_lnmm_1001.png",
+    "right_img": "presentation_assets/drw_lnmm_1020.png",
+    "left_label": "STRUCTURAL PANEL DETAILS LNMM-M3",
+    "right_label": "LARGE-FORMAT WALL PARTITIONS"
+  },
+  {
+    "id": "29",
+    "title": "JURIS PUPAINIS",
+    "subtitle": "PORTFOLIO 2026 · ARCHITECTURE & ENGINEERING",
+    "category": "SUMMARY",
+    "year": "2026",
+    "type": "closing"
+  }
+];
+    let currentIndex = 0;
+    const themes = ["dark", "light", "mono"];
+    let currentThemeIdx = 0;
+
+    const slideStage = document.getElementById("slideStage");
+    const slideCounter = document.getElementById("slideCounter");
+    const progressBar = document.getElementById("progressBar");
+    const galleryModal = document.getElementById("galleryModal");
+    const galleryGrid = document.getElementById("galleryGrid");
+    const lightboxModal = document.getElementById("lightboxModal");
+    const lightboxImg = document.getElementById("lightboxImg");
+
+    function renderSlide(index) {
+      const s = slides[index];
+      const isCover = s.type === "cover";
+      const isClosing = s.type === "closing";
+
+      if (isCover || isClosing) {
+        slideStage.innerHTML = `
+          <div class="single-pane-center">
+            <div class="hero-badge">${isCover ? "RADOŠĀ UN PROFESIONĀLĀ MŪŽA PORTFOLIO" : "AUTORA REZUMĒ"}</div>
+            <h1 class="hero-title">${s.title}</h1>
+            <div class="hero-subtitle">${s.subtitle}</div>
+            <div class="hero-meta">
+              <span>PERIODS: 2008 – 2026</span>
+              <span>LOKĀCIJA: RĪGA, LATVIJA</span>
+              <span>DISCIPLĪNAS: ARHITEKTŪRA · INŽENIERIJA · METĀLKONSTRUKCIJAS</span>
+            </div>
+          </div>
+        `;
+      } else {
+        slideStage.innerHTML = `
+          <div class="slide-meta">
+            <div class="meta-left">
+              <span class="slide-badge">${s.id} / ${s.category} · ${s.year}</span>
+              <h2 class="slide-title">${s.title}</h2>
+              <p class="slide-subtitle">${s.subtitle}</p>
+            </div>
+            <div class="meta-right">
+              ${index + 1} / ${slides.length}
+            </div>
+          </div>
+          <div class="diptych-grid">
+            <div class="pane">
+              <div class="pane-media" onclick="openLightbox('${s.left_img}')">
+                <img src="${s.left_img}" alt="Drawing" loading="eager">
+              </div>
+              <div class="pane-caption">
+                <span>${s.left_label || "PROJEKTS / RASĒJUMS"}</span>
+                <span class="pane-tag">[CAD / STAGE]</span>
+              </div>
+            </div>
+            <div class="pane">
+              <div class="pane-media" onclick="openLightbox('${s.right_img}')">
+                <img src="${s.right_img}" alt="Realization" loading="eager">
+              </div>
+              <div class="pane-caption">
+                <span>${s.right_label || "REALIZĀCIJA / DARBĪBA"}</span>
+                <span class="pane-tag">[BUILT / CONTEXT]</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Update counters
+      const displayId = (index + 1).toString().padStart(2, "0");
+      slideCounter.innerText = `${displayId} / ${slides.length.toString().padStart(2, "0")}`;
+      const pct = ((index + 1) / slides.length) * 100;
+      progressBar.style.width = pct + "%";
+
+      updateGallerySelection();
+    }
+
+    function goToSlide(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= slides.length) idx = slides.length - 1;
+      currentIndex = idx;
+      renderSlide(currentIndex);
+    }
+
+    function nextSlide() {
+      if (currentIndex < slides.length - 1) {
+        goToSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      }
+    }
+
+    function toggleGallery() {
+      const isActive = galleryModal.classList.toggle("active");
+      if (isActive) buildGallery();
+    }
+
+    function buildGallery() {
+      galleryGrid.innerHTML = "";
+      slides.forEach((s, idx) => {
+        const card = document.createElement("div");
+        card.className = "gallery-card" + (idx === currentIndex ? " current" : "");
+        card.onclick = () => {
+          goToSlide(idx);
+          galleryModal.classList.remove("active");
+        };
+
+        let thumbsHtml = "";
+        if (s.left_img && s.right_img) {
+          thumbsHtml = `
+            <div class="gallery-card-thumb">
+              <img src="${s.left_img}" alt="L">
+              <img src="${s.right_img}" alt="R">
+            </div>
+          `;
+        } else {
+          thumbsHtml = `
+            <div class="gallery-card-thumb" style="grid-template-columns:1fr; align-items:center; justify-content:center; background:#181b1f;">
+              <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-align:center;">${s.title}</span>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          ${thumbsHtml}
+          <div class="gallery-card-info">
+            <span class="gallery-card-id">${s.id} · ${s.category}</span>
+            <span class="gallery-card-title">${s.title}</span>
+          </div>
+        `;
+        galleryGrid.appendChild(card);
+      });
+    }
+
+    function updateGallerySelection() {
+      const cards = document.querySelectorAll(".gallery-card");
+      cards.forEach((c, idx) => {
+        c.classList.toggle("current", idx === currentIndex);
+      });
+    }
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightboxModal.classList.add("active");
+    }
+
+    lightboxModal.onclick = () => {
+      lightboxModal.classList.remove("active");
+    };
+
+    // Event Listeners
+    document.getElementById("prevBtn").onclick = prevSlide;
+    document.getElementById("nextBtn").onclick = nextSlide;
+    document.getElementById("galleryBtn").onclick = toggleGallery;
+    document.getElementById("closeGalleryBtn").onclick = toggleGallery;
+
+    document.getElementById("themeBtn").onclick = () => {
+      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+      document.body.setAttribute("data-theme", themes[currentThemeIdx]);
+    };
+
+    document.getElementById("fullscreenBtn").onclick = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+
+    document.getElementById("printBtn").onclick = () => {
+      window.print();
+    };
+
+    document.getElementById("progressTrack").onclick = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      const targetIdx = Math.floor(pos * slides.length);
+      goToSlide(targetIdx);
+    };
+
+    // Keyboard navigation
+    window.addEventListener("keydown", (e) => {
+      if (lightboxModal.classList.contains("active")) {
+        if (e.key === "Escape") lightboxModal.classList.remove("active");
+        return;
+      }
+
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        goToSlide(slides.length - 1);
+      } else if (e.key.toLowerCase() === "g") {
+        toggleGallery();
+      } else if (e.key.toLowerCase() === "f") {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      } else if (e.key === "Escape") {
+        galleryModal.classList.remove("active");
+      }
+    });
+
+    // Initialize first slide
+    renderSlide(0);
+  </script>
+</body>
+</html>
