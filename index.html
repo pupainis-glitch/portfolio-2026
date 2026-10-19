@@ -59,7 +59,7 @@
       display: flex;
       flex-direction: column;
       user-select: none;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     /* Top Bar */
@@ -122,12 +122,6 @@
       border-color: var(--text-muted);
     }
 
-    .btn.active {
-      color: var(--text-main);
-      border-color: var(--accent);
-      background: var(--border-subtle);
-    }
-
     /* Main Viewport */
     main {
       flex: 1;
@@ -143,8 +137,8 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      padding: 18px 28px;
-      gap: 14px;
+      padding: 16px 28px;
+      gap: 12px;
     }
 
     /* Slide Header */
@@ -158,7 +152,7 @@
     .meta-left {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .slide-badge {
@@ -194,7 +188,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 18px;
       min-height: 0;
     }
 
@@ -226,10 +220,15 @@
       object-fit: contain;
       border-radius: 2px;
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .pane-media:hover img {
+    .pane-media img.loaded {
+      opacity: 1;
+    }
+
+    .pane-media:hover img.loaded {
       transform: scale(1.015);
     }
 
@@ -338,7 +337,7 @@
       height: 100%;
       width: 0%;
       background: var(--accent);
-      transition: width 0.2s ease;
+      transition: width 0.15s ease;
     }
 
     .key-hint {
@@ -366,11 +365,11 @@
       background: rgba(10, 12, 14, 0.95);
       backdrop-filter: blur(16px);
       z-index: 100;
-      padding: 30px;
+      padding: 24px 30px;
       overflow-y: auto;
       display: none;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     .gallery-overlay.active {
@@ -382,39 +381,33 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
+      padding-bottom: 14px;
     }
 
     .gallery-title {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-main);
     }
 
-    .gallery-filter {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
     }
 
     .gallery-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 12px;
+      padding: 10px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: all 0.2s;
+      gap: 8px;
+      transition: all 0.15s;
     }
 
     .gallery-card:hover {
@@ -428,14 +421,14 @@
     }
 
     .gallery-card-thumb {
-      height: 120px;
+      height: 105px;
       background: #000;
       border-radius: 4px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
+      gap: 3px;
       overflow: hidden;
-      padding: 4px;
+      padding: 3px;
     }
 
     .gallery-card-thumb img {
@@ -458,7 +451,7 @@
     }
 
     .gallery-card-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-main);
       white-space: nowrap;
@@ -478,7 +471,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 40px;
+      padding: 30px;
       cursor: zoom-out;
     }
 
@@ -494,7 +487,7 @@
       border-radius: 4px;
     }
 
-    /* Print Styles for PDF generation */
+    /* Print Styles */
     @media print {
       @page {
         size: landscape;
@@ -530,6 +523,9 @@
       .slide-badge, .slide-subtitle, .hero-subtitle {
         color: #444444 !important;
       }
+      .pane-media img {
+        opacity: 1 !important;
+      }
     }
   </style>
 </head>
@@ -542,7 +538,7 @@
       <span class="brand-sub">/ ARCHITECTURE & ENGINEERING</span>
     </div>
     <div class="header-controls">
-      <button class="btn" id="themeBtn" title="Pārslēgt tēmu (Tumšs / Gaišs / Melnbalts)">
+      <button class="btn" id="themeBtn" title="Pārslēgt tēmu">
         <span>THEME</span>
       </button>
       <button class="btn" id="galleryBtn" title="Atvērt visu slaidu matricu (G)">
@@ -559,9 +555,7 @@
 
   <!-- Slide Stage -->
   <main>
-    <div class="slide-stage" id="slideStage">
-      <!-- Dynamic slide content injected by JavaScript -->
-    </div>
+    <div class="slide-stage" id="slideStage"></div>
   </main>
 
   <!-- Bottom Navigation -->
@@ -591,9 +585,7 @@
       <div class="gallery-title">MEISTARA PORTFOLIO MATRICA (29 SLAIDI)</div>
       <button class="btn" id="closeGalleryBtn">AIZVĒRT [ESC]</button>
     </div>
-    <div class="gallery-grid" id="galleryGrid">
-      <!-- Injected by JavaScript -->
-    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
   </div>
 
   <!-- Fullscreen Lightbox Modal -->
@@ -617,10 +609,12 @@
     "subtitle": "Spatial volume and topography studies",
     "category": "ARCHITECTURE / MODEL MAKING",
     "year": "EARLY WORKS",
-    "left_img": "Arch maketi/mak 002.jpg",
-    "right_img": "Arch maketi/mak 005.jpg",
+    "left_img": "Arch maketi/mak 002.webp",
+    "right_img": "Arch maketi/mak 005.webp",
     "left_label": "STUDY MODEL / WOOD & FOAM",
-    "right_label": "MASSING & VOLUME STUDY"
+    "right_label": "MASSING & VOLUME STUDY",
+    "left_thumb": "thumbs/thumb_mak 002.webp",
+    "right_thumb": "thumbs/thumb_mak 005.webp"
   },
   {
     "id": "03",
@@ -628,10 +622,12 @@
     "subtitle": "Façade articulation and urban scale",
     "category": "ARCHITECTURE / MODEL MAKING",
     "year": "EARLY WORKS",
-    "left_img": "Arch maketi/mak 009.jpg",
-    "right_img": "Arch maketi/DSC05333.JPG",
+    "left_img": "Arch maketi/mak 009.webp",
+    "right_img": "Arch maketi/DSC05333.webp",
     "left_label": "FACADE DETAIL / CRAFT MODEL",
-    "right_label": "OVERALL COMPLEX COMPOSITION"
+    "right_label": "OVERALL COMPLEX COMPOSITION",
+    "left_thumb": "thumbs/thumb_mak 009.webp",
+    "right_thumb": "thumbs/thumb_DSC05333.webp"
   },
   {
     "id": "04",
@@ -639,10 +635,12 @@
     "subtitle": "2-hinge steel connection system & bridge node",
     "category": "STRUCTURAL ENGINEERING",
     "year": "2008",
-    "left_img": "Seni renderi/2sharniru detaljas_20080424_basic_klajs.jpg",
-    "right_img": "Seni renderi/2sharniru detaljas_20080424_basic_tilts.jpg",
+    "left_img": "Seni renderi/2sharniru detaljas_20080424_basic_klajs.webp",
+    "right_img": "Seni renderi/2sharniru detaljas_20080424_basic_tilts.webp",
     "left_label": "STRUCTURAL NODE SCHEMATIC",
-    "right_label": "3D GEOMETRY / SPATIAL TRUSS"
+    "right_label": "3D GEOMETRY / SPATIAL TRUSS",
+    "left_thumb": "thumbs/thumb_2sharniru detaljas_20080424_basic_klajs.webp",
+    "right_thumb": "thumbs/thumb_2sharniru detaljas_20080424_basic_tilts.webp"
   },
   {
     "id": "05",
@@ -650,10 +648,12 @@
     "subtitle": "Parametric steel frame & 'Alusipēds' mobile vehicle canopy",
     "category": "STRUCTURAL DESIGN & VEHICLE CANOPY",
     "year": "2011",
-    "left_img": "Seni renderi/jumta konstr_20110613_04.jpg",
-    "right_img": "presentation_assets/alusipeds_canopy_realization.jpg",
+    "left_img": "Seni renderi/jumta konstr_20110613_04.webp",
+    "right_img": "presentation_assets/alusipeds_canopy_realization.webp",
     "left_label": "3D CAD FRAME & HUMAN SCALE",
-    "right_label": "BUILT VEHICLE CANOPY REALIZATION"
+    "right_label": "BUILT VEHICLE CANOPY REALIZATION",
+    "left_thumb": "thumbs/thumb_jumta konstr_20110613_04.webp",
+    "right_thumb": "thumbs/thumb_alusipeds_canopy_realization.webp"
   },
   {
     "id": "06",
@@ -661,10 +661,12 @@
     "subtitle": "Entrance portal structures and exterior cladding",
     "category": "PUBLIC ARCHITECTURE",
     "year": "2014 – 2015",
-    "left_img": "presentation_assets/drw_dzkz_portali.png",
-    "right_img": "DZKZ/SAM_1319.JPG",
+    "left_img": "presentation_assets/drw_dzkz_portali.webp",
+    "right_img": "DZKZ/SAM_1319.webp",
     "left_label": "TECHNICAL DRAWING / PORTAL NODES",
-    "right_label": "BUILT REALIZATION / JŪRMALA"
+    "right_label": "BUILT REALIZATION / JŪRMALA",
+    "left_thumb": "thumbs/thumb_drw_dzkz_portali.webp",
+    "right_thumb": "thumbs/thumb_SAM_1319.webp"
   },
   {
     "id": "07",
@@ -672,10 +674,12 @@
     "subtitle": "Sanitary module structures & stainless steel detailing",
     "category": "PUBLIC INTERIOR",
     "year": "2015",
-    "left_img": "presentation_assets/drw_dzkz_wc_r1.png",
-    "right_img": "DZKZ/P4206031.JPG",
+    "left_img": "presentation_assets/drw_dzkz_wc_r1.webp",
+    "right_img": "DZKZ/P4206031.webp",
     "left_label": "PRODUCTION DRAWING / SECTIONS",
-    "right_label": "INTERIOR FINISH REALIZATION"
+    "right_label": "INTERIOR FINISH REALIZATION",
+    "left_thumb": "thumbs/thumb_drw_dzkz_wc_r1.webp",
+    "right_thumb": "thumbs/thumb_P4206031.webp"
   },
   {
     "id": "08",
@@ -683,10 +687,12 @@
     "subtitle": "RCH heavy machinery and rotary equipment design",
     "category": "INDUSTRIAL ENGINEERING",
     "year": "2015",
-    "left_img": "presentation_assets/drw_vbc_rch1350.png",
-    "right_img": "VBC/IMG_20190412_103340.jpg",
+    "left_img": "presentation_assets/drw_vbc_rch1350.webp",
+    "right_img": "VBC/IMG_20190412_103340.webp",
     "left_label": "ENGINEERING DRAWING / SECTIONS",
-    "right_label": "FABRICATION & FINAL ASSEMBLY"
+    "right_label": "FABRICATION & FINAL ASSEMBLY",
+    "left_thumb": "thumbs/thumb_drw_vbc_rch1350.webp",
+    "right_thumb": "thumbs/thumb_IMG_20190412_103340.webp"
   },
   {
     "id": "09",
@@ -694,10 +700,12 @@
     "subtitle": "Flight chamber and main structural envelope",
     "category": "WIND TUNNEL ENGINEERING",
     "year": "2015",
-    "left_img": "presentation_assets/drw_aerodium_indonesia_chamber.png",
-    "right_img": "Aerodium Indonesia/DSC_0747.JPG",
+    "left_img": "presentation_assets/drw_aerodium_indonesia_chamber.webp",
+    "right_img": "Aerodium Indonesia/DSC_0747.webp",
     "left_label": "FLIGHT CHAMBER FABRICATION DRAWING",
-    "right_label": "ON-SITE FLIGHT ZONE REALIZATION"
+    "right_label": "ON-SITE FLIGHT ZONE REALIZATION",
+    "left_thumb": "thumbs/thumb_drw_aerodium_indonesia_chamber.webp",
+    "right_thumb": "thumbs/thumb_DSC_0747.webp"
   },
   {
     "id": "10",
@@ -705,10 +713,12 @@
     "subtitle": "International logistics and transportation scheme",
     "category": "LOGISTICS & FABRICATION",
     "year": "2015",
-    "left_img": "presentation_assets/drw_aerodium_indonesia_transport.png",
-    "right_img": "Aerodium Indonesia/DSC_0278.JPG",
+    "left_img": "presentation_assets/drw_aerodium_indonesia_transport.webp",
+    "right_img": "Aerodium Indonesia/DSC_0278.webp",
     "left_label": "CONTAINER LOADING & PACKING SCHEME",
-    "right_label": "STRUCTURAL ERECTION ON SITE"
+    "right_label": "STRUCTURAL ERECTION ON SITE",
+    "left_thumb": "thumbs/thumb_drw_aerodium_indonesia_transport.webp",
+    "right_thumb": "thumbs/thumb_DSC_0278.webp"
   },
   {
     "id": "11",
@@ -716,10 +726,12 @@
     "subtitle": "Main structural frame assembly & safety barriers",
     "category": "WIND TUNNEL ENGINEERING",
     "year": "2015",
-    "left_img": "presentation_assets/drw_aerodium_r2_frame.png",
-    "right_img": "Aerodium R2/IMG_20181206_151527.jpg",
+    "left_img": "presentation_assets/drw_aerodium_r2_frame.webp",
+    "right_img": "Aerodium R2/IMG_20181206_151527.webp",
     "left_label": "ASSEMBLY SPECIFICATION DRAWING",
-    "right_label": "FACTORY STEEL FABRICATION"
+    "right_label": "FACTORY STEEL FABRICATION",
+    "left_thumb": "thumbs/thumb_drw_aerodium_r2_frame.webp",
+    "right_thumb": "thumbs/thumb_IMG_20181206_151527.webp"
   },
   {
     "id": "12",
@@ -727,10 +739,12 @@
     "subtitle": "Aerodynamic turning vanes and air flow guide system",
     "category": "AERODYNAMICS & DUCTING",
     "year": "2015",
-    "left_img": "presentation_assets/drw_aerodium_r2_vanes.png",
-    "right_img": "Aerodium R2/IMG_20181217_141426.jpg",
+    "left_img": "presentation_assets/drw_aerodium_r2_vanes.webp",
+    "right_img": "Aerodium R2/IMG_20181217_141426.webp",
     "left_label": "TURNING VANE PRODUCTION DRAWING",
-    "right_label": "FINISHED VANE SEGMENTS"
+    "right_label": "FINISHED VANE SEGMENTS",
+    "left_thumb": "thumbs/thumb_drw_aerodium_r2_vanes.webp",
+    "right_thumb": "thumbs/thumb_IMG_20181217_141426.webp"
   },
   {
     "id": "13",
@@ -738,10 +752,12 @@
     "subtitle": "Heavy-duty modular steel framework",
     "category": "EQUIPMENT DESIGN",
     "year": "2016",
-    "left_img": "presentation_assets/drw_stirling.png",
-    "right_img": "Seni renderi/hi_boom_free_perlamutra.jpg",
+    "left_img": "presentation_assets/drw_stirling.webp",
+    "right_img": "Seni renderi/hi_boom_free_perlamutra.webp",
     "left_label": "STRUCTURAL CAD DRAWING STR-00",
-    "right_label": "INDUSTRIAL DESIGN VISUALIZATION"
+    "right_label": "INDUSTRIAL DESIGN VISUALIZATION",
+    "left_thumb": "thumbs/thumb_drw_stirling.webp",
+    "right_thumb": "thumbs/thumb_hi_boom_free_perlamutra.webp"
   },
   {
     "id": "14",
@@ -749,10 +765,12 @@
     "subtitle": "Flight tower steel infrastructure and support grid",
     "category": "TALL STEEL STRUCTURES",
     "year": "2017 – 2019",
-    "left_img": "Aerodium Periton/DSC_2314.JPG",
-    "right_img": "Aerodium Periton/IMG_20170725_174457.jpg",
+    "left_img": "Aerodium Periton/DSC_2314.webp",
+    "right_img": "Aerodium Periton/IMG_20170725_174457.webp",
     "left_label": "MAIN COLUMN & TRUSS ASSEMBLY",
-    "right_label": "INTERMEDIATE RING ERECTION"
+    "right_label": "INTERMEDIATE RING ERECTION",
+    "left_thumb": "thumbs/thumb_DSC_2314.webp",
+    "right_thumb": "thumbs/thumb_IMG_20170725_174457.webp"
   },
   {
     "id": "15",
@@ -760,10 +778,12 @@
     "subtitle": "Upper flight deck and glass chamber envelope",
     "category": "TALL STEEL STRUCTURES",
     "year": "2017 – 2019",
-    "left_img": "Aerodium Periton/IMG_20170728_100533.jpg",
-    "right_img": "Aerodium Periton/IMG_20191024_163832.jpg",
+    "left_img": "Aerodium Periton/IMG_20170728_100533.webp",
+    "right_img": "Aerodium Periton/IMG_20191024_163832.webp",
     "left_label": "SUBSTRUCTURE INTEGRATION",
-    "right_label": "FINISHED FACILITY OVERVIEW"
+    "right_label": "FINISHED FACILITY OVERVIEW",
+    "left_thumb": "thumbs/thumb_IMG_20170728_100533.webp",
+    "right_thumb": "thumbs/thumb_IMG_20191024_163832.webp"
   },
   {
     "id": "16",
@@ -771,10 +791,12 @@
     "subtitle": "Open-air flying platform & aerodynamic perimeter",
     "category": "OUTDOOR ATTRACTION",
     "year": "2018",
-    "left_img": "Aerodium O2 platforma/PLATFORMA.150.jpg",
-    "right_img": "Aerodium O2 platforma/DSC_2206.JPG",
+    "left_img": "Aerodium O2 platforma/PLATFORMA.150.webp",
+    "right_img": "Aerodium O2 platforma/DSC_2206.webp",
     "left_label": "3D CAD MODEL / AIR DUCT PLATFORM",
-    "right_label": "FLIGHT OPERATION IN NATURE"
+    "right_label": "FLIGHT OPERATION IN NATURE",
+    "left_thumb": "thumbs/thumb_PLATFORMA.150.webp",
+    "right_thumb": "thumbs/thumb_DSC_2206.webp"
   },
   {
     "id": "17",
@@ -782,10 +804,12 @@
     "subtitle": "Precision fan diffusers and high-speed ducting",
     "category": "AERODYNAMIC DUCTING",
     "year": "2018",
-    "left_img": "presentation_assets/drw_aerodium_r4_diffusers.png",
-    "right_img": "Aeroium R4/IMG_20190511_131528.jpg",
+    "left_img": "presentation_assets/drw_aerodium_r4_diffusers.webp",
+    "right_img": "Aeroium R4/IMG_20190511_131528.webp",
     "left_label": "DIFFUSER FABRICATION SPECIFICATION",
-    "right_label": "BUILT DIFFUSER STRUCTURE ON SITE"
+    "right_label": "BUILT DIFFUSER STRUCTURE ON SITE",
+    "left_thumb": "thumbs/thumb_drw_aerodium_r4_diffusers.webp",
+    "right_thumb": "thumbs/thumb_IMG_20190511_131528.webp"
   },
   {
     "id": "18",
@@ -793,10 +817,12 @@
     "subtitle": "Primary structural shell and heavy fan casing",
     "category": "WIND TUNNEL CORE",
     "year": "2019",
-    "left_img": "presentation_assets/drw_aerodium_r4_body.png",
-    "right_img": "Aeroium R4/IMG_20190517_115054.jpg",
+    "left_img": "presentation_assets/drw_aerodium_r4_body.webp",
+    "right_img": "Aeroium R4/IMG_20190517_115054.webp",
     "left_label": "SHELL PRODUCTION BLUEPRINT",
-    "right_label": "CRANE INSTALLATION OF DUCTS"
+    "right_label": "CRANE INSTALLATION OF DUCTS",
+    "left_thumb": "thumbs/thumb_drw_aerodium_r4_body.webp",
+    "right_thumb": "thumbs/thumb_IMG_20190517_115054.webp"
   },
   {
     "id": "19",
@@ -804,10 +830,12 @@
     "subtitle": "Flight chamber interior and final commissioning",
     "category": "COMMISSIONING",
     "year": "2021 – 2022",
-    "left_img": "Aeroium R4/IMG_20211103_155632.jpg",
-    "right_img": "Aeroium R4/IMG_20211221_120532.jpg",
+    "left_img": "Aeroium R4/IMG_20211103_155632.webp",
+    "right_img": "Aeroium R4/IMG_20211221_120532.webp",
     "left_label": "INTERIOR CHAMBER INTEGRATION",
-    "right_label": "OPERATIONAL FACILITY AT NIGHT"
+    "right_label": "OPERATIONAL FACILITY AT NIGHT",
+    "left_thumb": "thumbs/thumb_IMG_20211103_155632.webp",
+    "right_thumb": "thumbs/thumb_IMG_20211221_120532.webp"
   },
   {
     "id": "20",
@@ -815,10 +843,12 @@
     "subtitle": "W2W aerodynamic concept and architectural integration",
     "category": "R&D INNOVATION",
     "year": "2018 – 2020",
-    "left_img": "Aerodium R&D/W2W_11.730.jpg",
-    "right_img": "Aerodium R&D/FAS_1.jpg",
+    "left_img": "Aerodium R&D/W2W_11.730.webp",
+    "right_img": "Aerodium R&D/FAS_1.webp",
     "left_label": "W2W FLUID-FLOW CONCEPT",
-    "right_label": "FAÇADE INTEGRATION RENDERING"
+    "right_label": "FAÇADE INTEGRATION RENDERING",
+    "left_thumb": "thumbs/thumb_W2W_11.730.webp",
+    "right_thumb": "thumbs/thumb_FAS_1.webp"
   },
   {
     "id": "21",
@@ -826,10 +856,12 @@
     "subtitle": "Prefabricated modular timber/steel portal frame home",
     "category": "MODULAR ARCHITECTURE",
     "year": "2020",
-    "left_img": "presentation_assets/drw_portal_house.png",
-    "right_img": "Seni renderi/Portal hause_Rev8 9.png",
+    "left_img": "presentation_assets/drw_portal_house.webp",
+    "right_img": "Seni renderi/Portal hause_Rev8 9.webp",
     "left_label": "STRUCTURAL PORTAL FRAME PLAN",
-    "right_label": "ARCHITECTURAL VISUALIZATION"
+    "right_label": "ARCHITECTURAL VISUALIZATION",
+    "left_thumb": "thumbs/thumb_drw_portal_house.webp",
+    "right_thumb": "thumbs/thumb_Portal hause_Rev8 9.webp"
   },
   {
     "id": "22",
@@ -837,10 +869,12 @@
     "subtitle": "Large-span membrane canopies (7.5x7.5m) · Abu Dhabi",
     "category": "TENSILE ARCHITECTURE",
     "year": "2019 – 2020",
-    "left_img": "presentation_assets/drw_mdt_canopy.png",
-    "right_img": "MDT-tex/20260208_174647.jpg",
+    "left_img": "presentation_assets/drw_mdt_canopy.webp",
+    "right_img": "MDT-tex/20260208_174647.webp",
     "left_label": "CANOPY CANTILEVER ENGINEERING",
-    "right_label": "MEMBRANE MAST ASSEMBLY ON SITE"
+    "right_label": "MEMBRANE MAST ASSEMBLY ON SITE",
+    "left_thumb": "thumbs/thumb_drw_mdt_canopy.webp",
+    "right_thumb": "thumbs/thumb_20260208_174647.webp"
   },
   {
     "id": "23",
@@ -848,10 +882,12 @@
     "subtitle": "High-load cantilever baseplates and anchoring systems",
     "category": "STRUCTURAL DETAILING",
     "year": "2020",
-    "left_img": "presentation_assets/drw_mdt_flange.png",
-    "right_img": "MDT-tex/DSC_4741_980px_460px.jpg",
+    "left_img": "presentation_assets/drw_mdt_flange.webp",
+    "right_img": "MDT-tex/DSC_4741_980px_460px.webp",
     "left_label": "BASE FLANGE FABRICATION REDESIGN",
-    "right_label": "FABRICATED ANCHOR BASE"
+    "right_label": "FABRICATED ANCHOR BASE",
+    "left_thumb": "thumbs/thumb_drw_mdt_flange.webp",
+    "right_thumb": "thumbs/thumb_DSC_4741_980px_460px.webp"
   },
   {
     "id": "24",
@@ -859,10 +895,12 @@
     "subtitle": "Bespoke architectural umbrellas · Bosphorus, Istanbul",
     "category": "HOSPITALITY ARCHITECTURE",
     "year": "2022 – 2023",
-    "left_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-8.jpg",
-    "right_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-9.jpg",
+    "left_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-8.webp",
+    "right_img": "MDT-tex/mdt-tex-peninsula-hotel-istanbul-9.webp",
     "left_label": "SEASIDE PROMENADE INSTALLATION",
-    "right_label": "HISTORIC WATERFRONT CONTEXT"
+    "right_label": "HISTORIC WATERFRONT CONTEXT",
+    "left_thumb": "thumbs/thumb_mdt-tex-peninsula-hotel-istanbul-8.webp",
+    "right_thumb": "thumbs/thumb_mdt-tex-peninsula-hotel-istanbul-9.webp"
   },
   {
     "id": "25",
@@ -870,10 +908,12 @@
     "subtitle": "Urban microclimate cooling and kinetic sun protection",
     "category": "URBAN DESIGN",
     "year": "2023 – 2024",
-    "left_img": "MDT-tex/csm_ClimateIntervention_1_4c66894de0.png",
-    "right_img": "MDT-tex/csm_ClimateIntervention_3_6655fd0914.png",
+    "left_img": "MDT-tex/csm_ClimateIntervention_1_4c66894de0.webp",
+    "right_img": "MDT-tex/csm_ClimateIntervention_3_6655fd0914.webp",
     "left_label": "KINETIC MODULAR SHADE CONCEPT",
-    "right_label": "URBAN PLAZA DEPLOYMENT"
+    "right_label": "URBAN PLAZA DEPLOYMENT",
+    "left_thumb": "thumbs/thumb_csm_ClimateIntervention_1_4c66894de0.webp",
+    "right_thumb": "thumbs/thumb_csm_ClimateIntervention_3_6655fd0914.webp"
   },
   {
     "id": "26",
@@ -881,10 +921,12 @@
     "subtitle": "High-precision luge/sled structural components",
     "category": "HIGH-PERFORMANCE SPORTS",
     "year": "2022",
-    "left_img": "presentation_assets/drw_prestol_olt_sled.png",
-    "right_img": "Prestol/7-1.png",
+    "left_img": "presentation_assets/drw_prestol_olt_sled.webp",
+    "right_img": "Prestol/7-1.webp",
     "left_label": "PRECISION CNC DRAWING OLT-USA",
-    "right_label": "COMPLEX RUNNER CAD GEOMETRY"
+    "right_label": "COMPLEX RUNNER CAD GEOMETRY",
+    "left_thumb": "thumbs/thumb_drw_prestol_olt_sled.webp",
+    "right_thumb": "thumbs/thumb_7-1.webp"
   },
   {
     "id": "27",
@@ -892,10 +934,12 @@
     "subtitle": "Self-service station pod design & batch production",
     "category": "INDUSTRIAL & PRODUCT DESIGN",
     "year": "2021 – 2022",
-    "left_img": "presentation_assets/drw_prestol_chs_station.png",
-    "right_img": "Prestol/20261010_104657.jpg",
+    "left_img": "presentation_assets/drw_prestol_chs_station.webp",
+    "right_img": "Prestol/20261010_104657.webp",
     "left_label": "CAD SPECIFICATION & SECTIONS",
-    "right_label": "BATCH WORKSHOP FABRICATION REALIZATION"
+    "right_label": "BATCH WORKSHOP FABRICATION REALIZATION",
+    "left_thumb": "thumbs/thumb_drw_prestol_chs_station.webp",
+    "right_thumb": "thumbs/thumb_20261010_104657.webp"
   },
   {
     "id": "28",
@@ -903,10 +947,12 @@
     "subtitle": "Specialized gallery panel system & exhibition architecture",
     "category": "MUSEUM ARCHITECTURE",
     "year": "2026",
-    "left_img": "presentation_assets/drw_lnmm_1001.png",
-    "right_img": "presentation_assets/drw_lnmm_1020.png",
+    "left_img": "presentation_assets/drw_lnmm_1001.webp",
+    "right_img": "presentation_assets/drw_lnmm_1020.webp",
     "left_label": "STRUCTURAL PANEL DETAILS LNMM-M3",
-    "right_label": "LARGE-FORMAT WALL PARTITIONS"
+    "right_label": "LARGE-FORMAT WALL PARTITIONS",
+    "left_thumb": "thumbs/thumb_drw_lnmm_1001.webp",
+    "right_thumb": "thumbs/thumb_drw_lnmm_1020.webp"
   },
   {
     "id": "29",
@@ -928,6 +974,26 @@
     const galleryGrid = document.getElementById("galleryGrid");
     const lightboxModal = document.getElementById("lightboxModal");
     const lightboxImg = document.getElementById("lightboxImg");
+
+    // Smart preloader cache
+    const cache = new Set();
+    function preloadImage(url) {
+      if (!url || cache.has(url)) return;
+      const img = new Image();
+      img.src = url;
+      cache.add(url);
+    }
+
+    function preloadNearby(idx) {
+      [-1, 1, 2].forEach(offset => {
+        const target = idx + offset;
+        if (target >= 0 && target < slides.length) {
+          const s = slides[target];
+          if (s.left_img) preloadImage(s.left_img);
+          if (s.right_img) preloadImage(s.right_img);
+        }
+      });
+    }
 
     function renderSlide(index) {
       const s = slides[index];
@@ -962,7 +1028,7 @@
           <div class="diptych-grid">
             <div class="pane">
               <div class="pane-media" onclick="openLightbox('${s.left_img}')">
-                <img src="${s.left_img}" alt="Drawing" loading="eager">
+                <img src="${s.left_img}" alt="Drawing" loading="eager" decoding="async" onload="this.classList.add('loaded')">
               </div>
               <div class="pane-caption">
                 <span>${s.left_label || "PROJEKTS / RASĒJUMS"}</span>
@@ -971,7 +1037,7 @@
             </div>
             <div class="pane">
               <div class="pane-media" onclick="openLightbox('${s.right_img}')">
-                <img src="${s.right_img}" alt="Realization" loading="eager">
+                <img src="${s.right_img}" alt="Realization" loading="eager" decoding="async" onload="this.classList.add('loaded')">
               </div>
               <div class="pane-caption">
                 <span>${s.right_label || "REALIZĀCIJA / DARBĪBA"}</span>
@@ -982,13 +1048,13 @@
         `;
       }
 
-      // Update counters
       const displayId = (index + 1).toString().padStart(2, "0");
       slideCounter.innerText = `${displayId} / ${slides.length.toString().padStart(2, "0")}`;
       const pct = ((index + 1) / slides.length) * 100;
       progressBar.style.width = pct + "%";
 
       updateGallerySelection();
+      preloadNearby(index);
     }
 
     function goToSlide(idx) {
@@ -1010,9 +1076,13 @@
       }
     }
 
+    let galleryBuilt = false;
     function toggleGallery() {
       const isActive = galleryModal.classList.toggle("active");
-      if (isActive) buildGallery();
+      if (isActive && !galleryBuilt) {
+        buildGallery();
+        galleryBuilt = true;
+      }
     }
 
     function buildGallery() {
@@ -1026,11 +1096,15 @@
         };
 
         let thumbsHtml = "";
-        if (s.left_img && s.right_img) {
+        // Use lightweight dedicated thumbnails (360px WebP)
+        const leftThumb = s.left_thumb || s.left_img;
+        const rightThumb = s.right_thumb || s.right_img;
+        
+        if (leftThumb && rightThumb) {
           thumbsHtml = `
             <div class="gallery-card-thumb">
-              <img src="${s.left_img}" alt="L">
-              <img src="${s.right_img}" alt="R">
+              <img src="${leftThumb}" alt="L" loading="lazy" decoding="async">
+              <img src="${rightThumb}" alt="R" loading="lazy" decoding="async">
             </div>
           `;
         } else {
@@ -1068,7 +1142,6 @@
       lightboxModal.classList.remove("active");
     };
 
-    // Event Listeners
     document.getElementById("prevBtn").onclick = prevSlide;
     document.getElementById("nextBtn").onclick = nextSlide;
     document.getElementById("galleryBtn").onclick = toggleGallery;
@@ -1098,7 +1171,6 @@
       goToSlide(targetIdx);
     };
 
-    // Keyboard navigation
     window.addEventListener("keydown", (e) => {
       if (lightboxModal.classList.contains("active")) {
         if (e.key === "Escape") lightboxModal.classList.remove("active");
@@ -1130,7 +1202,7 @@
       }
     });
 
-    // Initialize first slide
+    // Initialize first slide and preload adjacent
     renderSlide(0);
   </script>
 </body>
