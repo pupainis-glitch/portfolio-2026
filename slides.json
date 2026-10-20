@@ -347,6 +347,32 @@
   },
   {
     "id": "28",
+    "title": "JRA: OBSERVATORIJA VECDAUGAVA",
+    "subtitle": "From notebook concept hand sketch to built floating social platform",
+    "category": "NAVAL ARCHITECTURE",
+    "year": "2024",
+    "left_img": "presentation_assets/raft_concept_sketch.webp",
+    "right_img": "JRA/O_VDG.webp",
+    "left_label": "ORIGINAL NOTEBOOK CONCEPT SKETCH",
+    "right_label": "BUILT OBSERVATORIJA RAFT ON WATER",
+    "left_thumb": "thumbs/thumb_raft_concept_sketch.webp",
+    "right_thumb": "thumbs/thumb_O_VDG.webp"
+  },
+  {
+    "id": "29",
+    "title": "JRA: CHILLBOARD (2XSUP)",
+    "subtitle": "Twin-hull leisure catamaran & modular solar canopy evolution",
+    "category": "WATERCRAFT INNOVATION",
+    "year": "2024 – 2025",
+    "left_img": "presentation_assets/chillboard_sketches_composite.webp",
+    "right_img": "presentation_assets/chillboard_realization.webp",
+    "left_label": "3D CAD ITERATIONS (REV 01 – REV 03)",
+    "right_label": "BUILT CHILLBOARD PROTOTYPE AT DOCK",
+    "left_thumb": "thumbs/thumb_chillboard_sketches_composite.webp",
+    "right_thumb": "thumbs/thumb_chillboard_realization.webp"
+  },
+  {
+    "id": "30",
     "title": "LATVIAN NATIONAL MUSEUM OF ART",
     "subtitle": "Specialized gallery panel system & exhibition architecture",
     "category": "MUSEUM ARCHITECTURE",
@@ -359,7 +385,7 @@
     "right_thumb": "thumbs/thumb_drw_lnmm_1020.webp"
   },
   {
-    "id": "29",
+    "id": "31",
     "title": "JURIS PUPAINIS",
     "subtitle": "PORTFOLIO 2026 · ARCHITECTURE & ENGINEERING",
     "category": "SUMMARY",
